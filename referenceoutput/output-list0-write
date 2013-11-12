@@ -1,0 +1,24 @@
+|xxxx|    |    | write
+                           1 * [xxxx]        2048 bytes
+
+|xxx |    |    | write
+                           1 * [xxx ]        1536 bytes
+
+| xxx|    |    | write
+                           1 * [ xxx]        1536 bytes
+
+| xx |    |    | write
+                           1 * [ xx ]        1024 bytes
+
+|xxxx|xxxx|    | write
+                                             0 bytes
+
+|  xx|xxxx|    | write
+[xx  ]                                       1024 bytes
+
+|xxxx|xx  |    | write
+                   [  xx]                    1024 bytes
+
+|  xx|xx  |    | write
+[xx  ]             [  xx]                    2048 bytes
+

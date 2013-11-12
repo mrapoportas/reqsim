@@ -1,0 +1,24 @@
+|xxxx|    |    | read
+[xxxx]                                       2048 bytes
+
+|xxx |    |    | read
+[xxx ]                                       1536 bytes
+
+| xxx|    |    | read
+[ xxx]                                       1536 bytes
+
+| xx |    |    | read
+[ xx ]                                       1024 bytes
+
+|xxxx|xxxx|    | read
+[xxxx]             [xxxx]                    4096 bytes
+
+|  xx|xxxx|    | read
+[  xx]             [xxxx]                    3072 bytes
+
+|xxxx|xx  |    | read
+[xxxx]             [xx  ]                    3072 bytes
+
+|  xx|xx  |    | read
+[  xx]             [xx  ]                    2048 bytes
+

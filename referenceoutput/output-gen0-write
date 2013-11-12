@@ -1,0 +1,21 @@
+|xxxx|xxxx|    |    |    | write
+                           2 * [xxxx]        4096 bytes
+
+| xxx|xxxx|    |    |    | write
+[x   ]                     2 * [xxxx]        4608 bytes
+
+|  xx|xxxx|    |    |    | write
+[xx  ]                     2 * [xxxx]        5120 bytes
+
+|   x|xxxx|    |    |    | write
+[   x]             [xxxx]             [xxxx] 4608 bytes
+
+|   x|xxx |    |    |    | write
+[   x]             [xxx ]             [xxxx] 4096 bytes
+
+|   x|xx  |    |    |    | write
+[   x]             [xx  ]             [xxxx] 3584 bytes
+
+|   x|x   |    |    |    | write
+[   x]             [x   ]             [xxxx] 3072 bytes
+
