@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 
 enum request_nature {READ_REQUEST, WRITE_REQUEST};
 
@@ -34,4 +35,24 @@ struct request_list {
     struct stripe_request *list;
 };
 
+enum raid_level {RAID4, RAID5};
+
+#define NO_DISK -1
+
+struct disk_array {
+    enum raid_level level;
+    unsigned data_disks;
+    unsigned striping_unit;
+    int faulty_disk; /* Can be positive or NO_DISK, with the latter
+                        suggesting no disk in the array is faulty. */
+};
+
+struct raid_req {
+    enum request_nature nature;
+    unsigned offset;
+    unsigned len;
+};
+
 #define SECTOR 512
+
+unsigned disktounit(struct disk_array *array, unsigned disk, unsigned stripe);
