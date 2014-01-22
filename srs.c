@@ -8,9 +8,9 @@
  * qualified with REQ_LIST. Otherwise, requests are produced at execution
  * using one (REQ_GENERATOR/req_gen) of the generators also from
  * raid_requests.c. */
-/*#define FIXED_REQUESTS*/
+#define FIXED_REQUESTS
 #define REQ_GENERATOR 3
-#define REQ_LIST 3
+#define REQ_LIST 4
 
 extern struct erreqlist req_list[];
 extern unsigned (*req_gen[])(struct ext_raid_req **);
@@ -179,9 +179,6 @@ static void print_scope_line_f0(struct scope_groups *sg, unsigned mode)
 
 /* The second parameter has no purpose at all, and is added only to allow
  * the two scope line functions to have the same parameter list. */
-
-/* Might as well convert scope_line to an array, as this function is not
- * suitable for long stripes. */
 static void print_scope_line_f1(struct scope_groups *scopes, unsigned mode)
 {
     char *scope_line; /* Unformatted scope line. */
@@ -233,24 +230,19 @@ static void print_scope_line_f1(struct scope_groups *scopes, unsigned mode)
         visualise_scope(&scopes->parity_unit, scope_line + array->data_disks *
          unit_sectors);
 
-    /* Formatting is added here, that is, just before printing.
-     * Printing */
+    /* Formatting is added here, that is, just before printing. */
     for (disk = 0; disk <= array->data_disks; ++disk) {
         unit = disktounit(disk);
         putchar('|');
-        if (unit == array->data_disks)
-            printf("\x1B[7m"); /* Use reverse video for the parity scope. */
         printf("%.*s", unit_sectors, scope_line + unit * unit_sectors);
-        if (unit == array->data_disks)
-            printf("\x1B[0m"); /* Restore regular text. */
     }
 
     /* For other request units and off-request units we rely on a zero scope
      * length to eliminate the component. */
     printf("| %d bytes\n",
       scopes->first_request_unit.length +
-      scopes->other_request_units.length * (request_units - 2 - (fustat >
-      first_unit && fustat < first_unit + request_units - 1) ? 1 : 0) +
+      scopes->other_request_units.length * (request_units - 2 - ((fustat >
+      first_unit && fustat < first_unit + request_units - 1) ? 1 : 0)) +
       scopes->final_request_unit.length +
       scopes->off_request_units.length * (array->data_disks - request_units) +
       scopes->parity_unit.length);
@@ -261,7 +253,9 @@ static void print_scope_line_f1(struct scope_groups *scopes, unsigned mode)
 /* Nonredundant-write. */
 static void nw_method(struct scope_groups *write_scopes)
 {
-    /* Write scopes are currently not printed. */
+    struct scope_groups read_scopes = {{0, 0}};
+
+    (*print_scope_line)(&read_scopes, 0);
 }
 
 /* Read-modify-write. */
@@ -441,8 +435,10 @@ static void rr_method(struct scope_groups *req_scopes)
         faulty_unit_scope = req_scopes->other_request_units;
     else
         faulty_unit_scope = req_scopes->final_request_unit;
+
     if (request_units < array->data_disks)
         read_scopes.off_request_units = faulty_unit_scope;
+
     read_scopes.parity_unit = faulty_unit_scope;
 
     (*print_scope_line)(&read_scopes, (fustat > first_unit && fustat <
@@ -470,6 +466,8 @@ static void process_read(struct scope_groups *req_scopes)
 
 /* With the current formatting, we can fit 13 4-sector units on a line before
  * running out of columns. */
+
+/* The future of visualise_request is uncertain. */
 static void visualise_request()
 {
     unsigned column, relative_offset, sector_pos, starting_col, stripe_unit;
@@ -549,7 +547,7 @@ static void process_request()
         if (fustat == array->data_disks) fustat = PARITY_UNIT;
     }
 
-    visualise_request();
+    /*visualise_request();*/
 
     if (rd_req->nature == WRITE_REQUEST)
         process_write(&req_scopes);
@@ -576,8 +574,10 @@ static void rotatestringleft(char *string, unsigned len, unsigned units)
     }
 }
 
-static void colourandprintref2(unsigned rotation, char *string, unsigned
-  stringlen)
+/* Formatting common to every stripe request line in the RAID request
+ * header. */
+static void colourandprintref2(char *string, unsigned stringlen, unsigned
+  offset)
 {
     struct felemt { /* Formatting element. */
         unsigned pos; /* The position of the element against some string. */
@@ -585,13 +585,27 @@ static void colourandprintref2(unsigned rotation, char *string, unsigned
         struct felemt *next;
     };
 
-    unsigned lastpos, paritydisk, unitsectors;
+    unsigned lastpos, paritydisk, rotation, unitsectors;
     struct felemt *curr, eol, faultc, faulto, parilc, parilo, parirc, pariro;
     /* ECMA-48 SGR terminal sequences. */
     char const *CTAG = "\x1B[0m", *FTAG = "\x1B[41m", *PTAG = "\x1B[33m";
 
-    /* The number of sectors in the striping unit. */
+    /* The number of sectors in the striping unit, a common derivative. */
     unitsectors = array->striping_unit / SECTOR;
+
+    /* Rotation of the stripe. For RAID5, assuming (1) the left-symmetric
+     * mapping, and (2) an ordinary single-level array configuration. */
+    rotation = (array->level == RAID4) ? 0 : offset / (array->data_disks *
+      array->striping_unit) % (array->data_disks + 1);
+
+    /* Initialise characters for the parity disk. */
+    memset(string + array->data_disks * (unitsectors + 1) + 1, ' ',
+      unitsectors);
+
+    /* We hide the last character from the function since rotating the
+     * whole string would require subsequent manipulation to restore the
+     * rightmost border. */
+    rotatestringleft(string, stringlen - 1, rotation * (unitsectors + 1));
 
     /* The disk carrying the parity for the current stripe. */
     paritydisk = (array->data_disks - rotation) % (array->data_disks + 1);
@@ -677,9 +691,10 @@ static void colourandprintref2(unsigned rotation, char *string, unsigned
 static void printraidreqheaderphyref4(unsigned sreqs, struct
   stripe_request *srs)
 {
-    unsigned index, offset, pos, rotation, stops[3], stringlen, stripelen;
+    unsigned index, offset, pos, stops[3], stringlen, stripelen;
     char actionsymbol, symboltouse;
     char *string, *next;
+    struct stripe_request *curr;
 
     /* One character for each sector in the stripe, including the parity
      * disk, one character before each disk to signal the start of a new
@@ -701,14 +716,16 @@ static void printraidreqheaderphyref4(unsigned sreqs, struct
      * derivative. */
     stripelen = array->data_disks * array->striping_unit;
 
+    curr = srs; /* We are at the first stripe request. */
+
     /* A stripe request conceptually divides a stripe into three zones,
      * the request area and two blocks of optional space around it.
      * Knowing where each zone stops helps us pick the right character to
      * print. We make zones explicit only for the first stripe request and
      * the final one, that is, where the sizes of the zones are not known
      * in advance. */
-    stops[0] = srs[0].offset % stripelen;
-    stops[1] = stops[0] + srs[0].length;
+    stops[0] = curr->offset % stripelen;
+    stops[1] = stops[0] + curr->length;
     stops[2] = stripelen;
 
     next = string;
@@ -724,32 +741,11 @@ static void printraidreqheaderphyref4(unsigned sreqs, struct
         }
     }
 
-    /* Rotation of the first stripe request. For RAID5, assuming (1) the
-     * left-symmetric mapping, and (2) an ordinary single-level array
-     * configuration. */
-    rotation = (array->level == RAID4) ? 0 : rd_req->offset / stripelen %
-      (array->data_disks + 1);
-
-    /* Initialise characters for the parity disk. */
-    memset(string + array->data_disks * (array->striping_unit / SECTOR +
-      1) + 1, ' ', array->striping_unit / SECTOR);
-
-    /* We hide the last character from the function since rotating the
-     * whole string would require subsequent manipulation to restore the
-     * rightmost border. */
-    rotatestringleft(string, stringlen - 1, rotation *
-      (array->striping_unit / SECTOR + 1));
-
-    colourandprintref2(rotation, string, stringlen);
+    colourandprintref2(string, stringlen, curr->offset);
 
     if (sreqs > 1) {
-        /* Although we do not need a new set of stops just yet, we must
-         * define them now, as sreqs is consumed shortly. */
-        stops[1] = srs[sreqs - 1].length;
-
-        sreqs -= 2;
-
-        while (sreqs--) {
+        /* Stripe requests second to penultimate, if any. */
+        while (++curr < srs + sreqs - 1) {
             next = string;
 
             for (pos = 0; pos < stripelen; pos += SECTOR) {
@@ -758,17 +754,11 @@ static void printraidreqheaderphyref4(unsigned sreqs, struct
                 *next++ = actionsymbol;
             }
 
-            if (array->level == RAID5)
-                rotation = (rotation + 1) % (array->data_disks + 1);
-
-            memset(string + array->data_disks * (array->striping_unit /
-              SECTOR + 1) + 1, ' ', array->striping_unit / SECTOR);
-
-            rotatestringleft(string, stringlen - 1, rotation *
-              (array->striping_unit / SECTOR + 1));
-
-            colourandprintref2(rotation, string, stringlen);
+            colourandprintref2(string, stringlen, curr->offset);
         }
+
+        /* We are now at the last stripe request.*/
+        stops[1] = curr->length;
 
         next = string;
         pos = 0;
@@ -786,16 +776,7 @@ static void printraidreqheaderphyref4(unsigned sreqs, struct
             }
         }
 
-        if (array->level == RAID5)
-            rotation = (rotation + 1) % (array->data_disks + 1);
-
-        memset(string + array->data_disks * (array->striping_unit / SECTOR
-          + 1) + 1, ' ', array->striping_unit / SECTOR);
-
-        rotatestringleft(string, stringlen - 1, rotation *
-          (array->striping_unit / SECTOR + 1));
-
-        colourandprintref2(rotation, string, stringlen);
+        colourandprintref2(string, stringlen, curr->offset);
     }
 
     free((void *) string);
@@ -871,6 +852,7 @@ static void printraidreqheaderlog(unsigned sreqs, struct stripe_request *srs)
 static void printraidreqheader(unsigned sreqs, struct stripe_request *srs)
 {
     printraidreqheaderphyref4(sreqs, srs);
+    putchar('\n');
 }
 
 static void loadstripereq()
@@ -901,11 +883,12 @@ static void loadstripereq()
         sr = srs;
         while (stripe_reqs--) {
             process_request();
-            putchar('\n');
 
             ++sr;
             ++stripe;
         }
+
+        putchar('\n'); /* A new line before the next RAID req header. */
 
         free((void *) srs);
     }

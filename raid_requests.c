@@ -345,13 +345,37 @@ static struct ext_raid_req req_list_2[] = {
 #define RDLEVL RAID5
 #define DTDSKS 4
 #define STUNIT 2048
-#define FAUDSK 0
+#define FAUDSK NO_DISK
 #define NATURE WRITE_REQUEST
-#define OFFSET (1 * DTDSKS * STUNIT)
-#define LENGTH (DTDSKS * STUNIT)
+#define OFFSET (0 * DTDSKS * STUNIT + DTDSKS * STUNIT - STUNIT - SECTOR)
+#define LENGTH (STUNIT + SECTOR + 2 * DTDSKS * STUNIT + 3 * STUNIT)
 
 static struct ext_raid_req req_list_3[] = {
     {{RDLEVL, DTDSKS, STUNIT, FAUDSK}, {NATURE, OFFSET, LENGTH}}
+};
+
+#undef RDLEVL
+#undef DTDSKS
+#undef STUNIT
+#undef FAUDSK
+#undef NATURE
+#undef OFFSET
+#undef LENGTH
+
+#define RDLEVL RAID5
+#define DTDSKS 6
+#define STUNIT 2048
+#define FAUDSK 4
+#define NATURE WRITE_REQUEST
+#define OFFSET (0 * DTDSKS * STUNIT + DTDSKS * STUNIT - STUNIT - SECTOR)
+#define LENGTH (STUNIT + SECTOR + 2 * DTDSKS * STUNIT + 3 * STUNIT)
+
+/* Demo list. */
+static struct ext_raid_req req_list_4[] = {
+    {{RAID4, DTDSKS, STUNIT, NO_DISK}, {WRITE_REQUEST, OFFSET, LENGTH}},
+    {{RAID4, DTDSKS, STUNIT,       4}, {WRITE_REQUEST, OFFSET, LENGTH}},
+    {{RAID4, DTDSKS, STUNIT, NO_DISK}, { READ_REQUEST, OFFSET, LENGTH}},
+    {{RAID5, DTDSKS, STUNIT, NO_DISK}, { READ_REQUEST, OFFSET, LENGTH}}
 };
 
 #undef RDLEVL
@@ -373,7 +397,8 @@ struct erreqlist req_list[] = {
     {sizeof req_list_0 / sizeof (struct ext_raid_req), req_list_0},
     {sizeof req_list_1 / sizeof (struct ext_raid_req), req_list_1},
     {sizeof req_list_2 / sizeof (struct ext_raid_req), req_list_2},
-    {sizeof req_list_3 / sizeof (struct ext_raid_req), req_list_3}
+    {sizeof req_list_3 / sizeof (struct ext_raid_req), req_list_3},
+    {sizeof req_list_4 / sizeof (struct ext_raid_req), req_list_4}
 };
 
 /* vim: set cindent shiftwidth=4 expandtab: */
