@@ -1,13 +1,15 @@
+
 .PHONY: clean
 
-srs: raid_requests.o srs.o
-	@gcc -o $@ $^
+# $^ is seemingly unavailable in MINIX (3.2.1).
+reqsim: builtinjobs.o reqsim.o
+	@$(CC) -o $@ builtinjobs.o reqsim.o
 
 clean:
-	@rm -f raid_requests.o srs srs.o
+	@rm -f builtinjobs.o reqsim reqsim.o
 
-raid_requests.o: raid_requests.c srs.h
-	@gcc -std=c89 -pedantic -c $<
+builtinjobs.o: builtinjobs.c reqsim.h
+	@$(CC) -std=c89 -pedantic -c $<
 
-srs.o: srs.c srs.h
-	@gcc -std=c89 -pedantic -c $<
+reqsim.o: reqsim.c reqsim.h
+	@$(CC) -std=c89 -pedantic -c $<

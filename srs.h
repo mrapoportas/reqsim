@@ -1,57 +1,42 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-enum raid_level {RAID4, RAID5};
+enum raidlvl {RAID4, RAID5};
 
-#define NO_DISK -1
-
-struct disk_array {
-    enum raid_level level;
-    unsigned data_disks;
-    unsigned striping_unit;
-    int faulty_disk; /* Can be positive or NO_DISK, with the latter
-                        suggesting no disk in the array is faulty. */
+struct dskarray {
+    enum raidlvl lvl;
+    unsigned datadsks;
+    unsigned stripingunit;
+    /* Keeps the fault (flt) status (stat) of the array (a). A value of
+     * FLTFREE means the array is fault-free. Any other value is the
+     * number of the disk considered faulty.*/
+    int fltstata;
 };
 
-enum request_nature {READ_REQUEST, WRITE_REQUEST};
+#define FLTFREE -1
 
-struct raid_req {
-    enum request_nature nature;
+enum reqnature {READREQ, WRITEREQ};
+
+struct raidreq {
+    enum reqnature nature;
     unsigned offset; /* Absolute offset; a 64-bit value in practice. */
-    unsigned len; /* Not sure if more than 32 bits are ever needed in
-                     practice. */
-};
- 
-/* Extended RAID request: a regular request together with an array
- * specification. */
-struct ext_raid_req {
-    struct disk_array array;
-    struct raid_req req;
+    unsigned len;    /* Not sure if more than 32 bits are ever needed in
+                        practice. */
 };
 
-/* Extended RAID request list. */
-struct erreqlist {
-    unsigned reqs;
-    struct ext_raid_req *list;
+/* Simulation job: a disk array specification together with a RAID request
+ * made againt it.*/
+struct job {
+    struct dskarray array;
+    struct raidreq req;
 };
 
-struct stripe_request {
-    unsigned offset; /* Absolute offset; a 64-bit value in practice. */
-    unsigned length; /* 32 bits should be adequate in practice. */
-};
-
-struct unit_scope {
-    unsigned offset;
-    unsigned length;
-};
-
-/* A set of all significant scope groups. */
-struct scope_groups {
-    struct unit_scope first_request_unit;
-    struct unit_scope final_request_unit;
-    struct unit_scope other_request_units;
-    struct unit_scope off_request_units;
-    struct unit_scope parity_unit;
+struct joblist {
+    unsigned jbcount;
+    struct job *list;
 };
 
 #define SECTOR 512
+
+/* vim: set cindent shiftwidth=4 expandtab: */

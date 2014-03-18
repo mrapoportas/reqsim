@@ -1,0 +1,24 @@
+|    |    |    |    |    |    |   w[33m|[0m    [33m|[0m
+|    |    |    |    |    |    [33m|[0m    [33m|[0mw   |
+
+|    |    |    |    |    |    |   x|   x| 1024 bytes
+|    |    |    |    |    |    |x   |x   | 1024 bytes
+
+|    |    |    |    |    |    |   w[33m|[0m    [33m|[0m
+|wwww|www |    |    |    |    [33m|[0m    [33m|[0mwwww|
+
+|    |    |    |    |    |    |   x|   x| 1024 bytes
+|xxxx|xxx |    |    |    |    |xxxx|xxxx| 7680 bytes
+
+|    |    |    |    | www|wwww|wwww[33m|[0m    [33m|[0m
+|    |    |    |    |    |    [33m|[0m    [33m|[0mw   |
+
+|    |    |    |    | xxx|xxxx|xxxx|xxxx| 7680 bytes
+|    |    |    |    |    |    |x   |x   | 1024 bytes
+
+|    |    |    |    | www|wwww|wwww[33m|[0m    [33m|[0m
+|wwww|www |    |    |    |    [33m|[0m    [33m|[0mwwww|
+
+|    |    |    |    | xxx|xxxx|xxxx|xxxx| 7680 bytes
+|xxxx|xxx |    |    |    |    |xxxx|xxxx| 7680 bytes
+

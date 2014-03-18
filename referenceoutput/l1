@@ -1,0 +1,104 @@
+|    |    |    |wwww|    |    |    [33m|[0m    [33m|[0m
+
+|    |    |    |xxxx|    |    |    |xxxx| 4096 bytes
+
+|    |    |    |[41mwwww[0m|    |    |    [33m|[0m    [33m|[0m
+
+|xxxx|xxxx|xxxx|    |xxxx|xxxx|xxxx|    | 12288 bytes
+
+|    |    |[41m    [0m|wwww|    |    |    [33m|[0m    [33m|[0m
+
+|    |    |    |xxxx|    |    |    |xxxx| 4096 bytes
+
+|    |    |    |wwww|    |    |    [33m|[0m[41m    [0m[33m|[0m
+
+|    |    |    |    |    |    |    |    | 0 bytes
+
+|    |    |    |www |    |    |    [33m|[0m    [33m|[0m
+
+|    |    |    |xxx |    |    |    |xxx | 3072 bytes
+
+|    |    |    |[41mwww [0m|    |    |    [33m|[0m    [33m|[0m
+
+|xxx |xxx |xxx |    |xxx |xxx |xxx |    | 9216 bytes
+
+|    |    |[41m    [0m|www |    |    |    [33m|[0m    [33m|[0m
+
+|    |    |    |xxx |    |    |    |xxx | 3072 bytes
+
+|    |    |    |www |    |    |    [33m|[0m[41m    [0m[33m|[0m
+
+|    |    |    |    |    |    |    |    | 0 bytes
+
+|    |    |    | ww |    |    |    [33m|[0m    [33m|[0m
+
+|    |    |    | xx |    |    |    | xx | 2048 bytes
+
+|    |    |    |[41m ww [0m|    |    |    [33m|[0m    [33m|[0m
+
+| xx | xx | xx |    | xx | xx | xx |    | 6144 bytes
+
+|    |    |[41m    [0m| ww |    |    |    [33m|[0m    [33m|[0m
+
+|    |    |    | xx |    |    |    | xx | 2048 bytes
+
+|    |    |    | ww |    |    |    [33m|[0m[41m    [0m[33m|[0m
+
+|    |    |    |    |    |    |    |    | 0 bytes
+
+|    |    |    |wwww|wwww|wwww|    [33m|[0m    [33m|[0m
+
+|xxxx|xxxx|xxxx|    |    |    |xxxx|    | 8192 bytes
+
+|    |    |    |[41mwwww[0m|wwww|wwww|    [33m|[0m    [33m|[0m
+
+|xxxx|xxxx|xxxx|    |    |    |xxxx|    | 8192 bytes
+
+|    |    |[41m    [0m|wwww|wwww|wwww|    [33m|[0m    [33m|[0m
+
+|    |    |    |xxxx|xxxx|xxxx|    |xxxx| 8192 bytes
+
+|    |    |    |wwww|wwww|wwww|    [33m|[0m[41m    [0m[33m|[0m
+
+|    |    |    |    |    |    |    |    | 0 bytes
+
+|    |    |    |wwww|wwww|www |    [33m|[0m    [33m|[0m
+
+|    |    |    |xxxx|xxxx|xxx |    |xxxx| 7680 bytes
+
+|    |    |    |[41mwwww[0m|wwww|www |    [33m|[0m    [33m|[0m
+
+|xxxx|xxxx|xxxx|    |    |   x|xxxx|    | 8704 bytes
+
+|    |    |    |wwww|wwww|[41mwww [0m|    [33m|[0m    [33m|[0m
+
+|xxx |xxx |xxx |   x|   x|    |xxx |   x| 7680 bytes
+
+|    |    |[41m    [0m|wwww|wwww|www |    [33m|[0m    [33m|[0m
+
+|    |    |    |xxxx|xxxx|xxx |    |xxxx| 7680 bytes
+
+|    |    |    |wwww|wwww|www |    [33m|[0m[41m    [0m[33m|[0m
+
+|    |    |    |    |    |    |    |    | 0 bytes
+
+|    |    |    |   w|wwww|www |    [33m|[0m    [33m|[0m
+
+|    |    |    |   x|xxxx|xxx |    |xxxx| 6144 bytes
+
+|    |    |    |   w|[41mwwww[0m|www |    [33m|[0m    [33m|[0m
+
+|xxxx|xxxx|xxxx|xxx |    |   x|xxxx|    | 10240 bytes
+
+|    |    |    |   w|wwww|[41mwww [0m|    [33m|[0m    [33m|[0m
+
+|xxx |xxx |xxx |xxxx|   x|    |xxx |   x| 9216 bytes
+
+|    |    |[41m    [0m|   w|wwww|www |    [33m|[0m    [33m|[0m
+
+|    |    |    |   x|xxxx|xxx |    |xxxx| 6144 bytes
+
+|    |    |    |   w|wwww|www |    [33m|[0m[41m    [0m[33m|[0m
+
+|    |    |    |    |    |    |    |    | 0 bytes
+

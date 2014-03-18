@@ -1,0 +1,64 @@
+|w   |    |    |    [33m|[0m    [33m|[0m
+
+|x   |    |    |    |x   | 1024 bytes
+
+|ww  |    |    |    [33m|[0m    [33m|[0m
+
+|xx  |    |    |    |xx  | 2048 bytes
+
+|www |    |    |    [33m|[0m    [33m|[0m
+
+|xxx |    |    |    |xxx | 3072 bytes
+
+|wwww|    |    |    [33m|[0m    [33m|[0m
+
+|xxxx|    |    |    |xxxx| 4096 bytes
+
+|wwww|w   |    |    [33m|[0m    [33m|[0m
+
+|xxxx|x   |    |    |xxxx| 4608 bytes
+
+|wwww|ww  |    |    [33m|[0m    [33m|[0m
+
+|    |  xx|xxxx|xxxx|    | 5120 bytes
+
+|wwww|www |    |    [33m|[0m    [33m|[0m
+
+|    |   x|xxxx|xxxx|    | 4608 bytes
+
+|wwww|wwww|    |    [33m|[0m    [33m|[0m
+
+|    |    |xxxx|xxxx|    | 4096 bytes
+
+|wwww|wwww|w   |    [33m|[0m    [33m|[0m
+
+|    |    | xxx|xxxx|    | 3584 bytes
+
+|wwww|wwww|ww  |    [33m|[0m    [33m|[0m
+
+|    |    |  xx|xxxx|    | 3072 bytes
+
+|wwww|wwww|www |    [33m|[0m    [33m|[0m
+
+|    |    |   x|xxxx|    | 2560 bytes
+
+|wwww|wwww|wwww|    [33m|[0m    [33m|[0m
+
+|    |    |    |xxxx|    | 2048 bytes
+
+|wwww|wwww|wwww|w   [33m|[0m    [33m|[0m
+
+|    |    |    | xxx|    | 1536 bytes
+
+|wwww|wwww|wwww|ww  [33m|[0m    [33m|[0m
+
+|    |    |    |  xx|    | 1024 bytes
+
+|wwww|wwww|wwww|www [33m|[0m    [33m|[0m
+
+|    |    |    |   x|    | 512 bytes
+
+|wwww|wwww|wwww|wwww[33m|[0m    [33m|[0m
+
+|    |    |    |    |    | 0 bytes
+
