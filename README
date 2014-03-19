@@ -1,0 +1,32 @@
+A simple text-only simulator for RAID level 4 and 5 requests. Originally
+written to aid the process of developing a RAID driver for MINIX 3. The
+simulator adopts certain concepts introduced elsewhere [1].
+
+Two blocks of text are printed for each simulation job. The top one is the
+job header and illustrates the disk array and RAID request the job is
+about. The columns and rows represent the array's disks and stripes,
+respectively. The cell with brown/yellow borders shows the parity disk for
+that stripe, while the remaining disks in the row carry the data. A red
+column means the corresponding disk is faulty. The second block visualises
+what is to be read from the stripe for each stripe request. What is to be
+written is absent, in large part because it is more or less the same as
+what is shown in the header. One character is one sector. For example,
+referenceoutput/l4 is a simulation of 4 RAID requests. The first two are
+both writes to an identical RAID4 array. The only difference is that the
+array develops a faulty disk for request 2. Requests 3 and 4 are identical
+reads to a RAID4 and RAID5 array, respectively. Notice how parity is
+distributed for RAID5.
+
+With a C implementation on your system, type "make" in the source
+directory to build the program. Either GCC or Clang will do for the
+compiler.
+
+The output is coloured, and there is no way to turn that off, as the
+colours convey important information. Consequently, you will need a
+terminal emulator which supports colours, for example, the Linux console,
+gnome-terminal, or the console in MINIX 3. To properly view the output on
+GNU/Linux, you may use "cat" or, say, "less -R".
+
+[1] Lee, E.K., "Software and Performance Issues in the 
+    Implementation of a RAID Prototype." Technical Report 
+    CSD-90-573, University of California at Berkeley, 1990.
